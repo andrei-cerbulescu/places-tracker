@@ -16,9 +16,15 @@ import android.view.ViewGroup
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.fragment.findNavController
+import com.andrei.cerbulescu.placestracker.fragments.PreviewImage
+import com.andrei.cerbulescu.placestracker.R
 import com.andrei.cerbulescu.placestracker.databinding.FragmentCameraBinding
+import com.andrei.cerbulescu.placestracker.databinding.FragmentPreviewImageBinding
 import com.andrei.cerbulescu.placestracker.utils.ANIMATION_FAST_MILLIS
 import com.andrei.cerbulescu.placestracker.utils.ANIMATION_SLOW_MILLIS
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -70,6 +76,7 @@ class Camera : Fragment() {
             imageCapture.takePicture(outputFileOptions, Executors.newSingleThreadExecutor(), object: ImageCapture.OnImageSavedCallback{
                 @SuppressLint("MissingPermission")
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         binding.root.postDelayed({
                             binding.root.foreground = ColorDrawable(Color.WHITE)
@@ -78,7 +85,10 @@ class Camera : Fragment() {
                         }, ANIMATION_SLOW_MILLIS)
 
                         fusedLocationClient.lastLocation.addOnSuccessListener {
-                            
+                            val imageUri = outputFileResults.savedUri
+                            val navigateAction = CameraDirections.actionCameraToPreviewImage(it, imageUri!!)
+                            cameraProviderFuture.get().unbind(imageCapture)
+                            findNavController().navigate(navigateAction)
                         }
                     }
                 }

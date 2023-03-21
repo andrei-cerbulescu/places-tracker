@@ -26,15 +26,18 @@
     </fragment>
     <fragment
         android:id="@+id/previewImage"
-        android:name="com.andrei.cerbulescu.placestracker.PreviewImage"
+        android:name="com.andrei.cerbulescu.placestracker.fragments.PreviewImage"
         android:label="fragment_preview_image"
         tools:layout="@layout/fragment_preview_image" >
         <action
-            android:id="@+id/action_previewImage_to_home2"
+            android:id="@+id/action_previewImage_to_home"
             app:destination="@id/home" />
         <argument
             android:name="location"
             app:argType="android.location.Location" />
+        <argument
+            android:name="imageUri"
+            app:argType="android.net.Uri" />
     </fragment>
 
 </navigation>
