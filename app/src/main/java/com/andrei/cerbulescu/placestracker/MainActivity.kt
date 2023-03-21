@@ -17,7 +17,9 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun get_permissions(){
-        var toBeRequested = arrayOf(android.Manifest.permission.CAMERA)
+        var toBeRequested = arrayOf(
+            android.Manifest.permission.CAMERA
+        )
         var needsConfirmation = mutableListOf<String>()
 
         for(e in toBeRequested){
