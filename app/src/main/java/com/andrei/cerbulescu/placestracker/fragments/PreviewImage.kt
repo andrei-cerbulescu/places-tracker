@@ -16,13 +16,20 @@ import com.andrei.cerbulescu.placestracker.data.AppDatabase
 import com.andrei.cerbulescu.placestracker.data.Place
 import com.andrei.cerbulescu.placestracker.data.PlaceViewModel
 import com.andrei.cerbulescu.placestracker.databinding.FragmentPreviewImageBinding
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import java.io.ByteArrayOutputStream
 
 
-class PreviewImage : Fragment() {
+class PreviewImage : Fragment(), OnMapReadyCallback {
     val args: PreviewImageArgs by navArgs()
     private lateinit var binding: FragmentPreviewImageBinding
     private lateinit var mPlaceViewModel: PlaceViewModel
+
+    private lateinit var googleMap: GoogleMap
 
     @SuppressLint("WrongThread")
     override fun onCreateView(
@@ -31,8 +38,11 @@ class PreviewImage : Fragment() {
     ): View? {
         binding = FragmentPreviewImageBinding.inflate(layoutInflater)
         var view = binding.root
-
         mPlaceViewModel = ViewModelProvider(this)[PlaceViewModel::class.java]
+
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.onResume()
+        binding.mapView.getMapAsync(this)
 
         var imagePreview = binding.imagePreview
         var bitmap = if (Build.VERSION.SDK_INT < 28) {
@@ -44,11 +54,22 @@ class PreviewImage : Fragment() {
         imagePreview.setImageBitmap(bitmap)
 
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
         val place = Place(0, args.location.latitude.toLong(), args.location.longitude.toLong(), stream.toByteArray())
         // AppDatabase.getDatabase(requireContext()).placeDao()
         mPlaceViewModel.addPlace(place)
         return view
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        p0?.let {
+            googleMap = it
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(args.location.latitude, args.location.longitude),
+                1F
+            ))
+            googleMap.addMarker(MarkerOptions().position(LatLng(args.location.latitude, args.location.longitude)))
+            //googleMap.moveCamera
+        }
     }
 
 }

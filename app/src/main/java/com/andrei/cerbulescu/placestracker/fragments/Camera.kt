@@ -20,6 +20,7 @@ import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.Navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.fragment.findNavController
 import com.andrei.cerbulescu.placestracker.fragments.PreviewImage
@@ -119,6 +120,13 @@ class Camera : Fragment() {
 
         var camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview, imageCapture)
 
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        cameraProviderFuture.get().shutdown()
     }
 
 
