@@ -13,4 +13,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:layout_alignParentBottom="true"/>
+
+    <TextView
+        android:id="@+id/counterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0" />
 </RelativeLayout>

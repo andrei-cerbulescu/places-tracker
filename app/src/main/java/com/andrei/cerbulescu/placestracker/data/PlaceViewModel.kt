@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PlaceViewModel(application: Application): AndroidViewModel(application) {
-    private val readAllData: LiveData<List<Place>>
+    val readAllData: LiveData<List<Place>>
     private val repository: PlaceRepository
 
     init{

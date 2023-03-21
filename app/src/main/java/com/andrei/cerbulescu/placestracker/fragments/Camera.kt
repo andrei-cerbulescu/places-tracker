@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
@@ -86,7 +87,8 @@ class Camera : Fragment() {
 
                         fusedLocationClient.lastLocation.addOnSuccessListener {
                             val imageUri = outputFileResults.savedUri
-                            val navigateAction = CameraDirections.actionCameraToPreviewImage(it, imageUri!!)
+                            var location = it ?: Location("0, 0")
+                            val navigateAction = CameraDirections.actionCameraToPreviewImage(location, imageUri!!)
                             cameraProviderFuture.get().unbind(imageCapture)
                             findNavController().navigate(navigateAction)
                         }
