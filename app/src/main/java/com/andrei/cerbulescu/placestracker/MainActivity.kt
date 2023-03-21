@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             get_permissions()
         }
-        supportFragmentManager.beginTransaction().replace(R.id.navigator, HomeFragment()).commit()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
