@@ -1,4 +1,4 @@
-package com.andrei.cerbulescu.placestracker
+package com.andrei.cerbulescu.placestracker.fragments
 
 import androidx.fragment.app.Fragment
 
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.andrei.cerbulescu.placestracker.R
 import com.andrei.cerbulescu.placestracker.databinding.FragmentHomeBinding
 
 class Home : Fragment() {

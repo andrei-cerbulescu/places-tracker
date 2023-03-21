@@ -1,7 +1,8 @@
-package com.andrei.cerbulescu.placestracker
+package com.andrei.cerbulescu.placestracker.fragments
 
 import android.content.ContentValues
-import android.media.Image
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,16 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.camera.core.*
-import androidx.camera.core.R
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.fragment.findNavController
 import com.andrei.cerbulescu.placestracker.databinding.FragmentCameraBinding
-import com.andrei.cerbulescu.placestracker.databinding.FragmentHomeBinding
+import com.andrei.cerbulescu.placestracker.utils.ANIMATION_FAST_MILLIS
+import com.andrei.cerbulescu.placestracker.utils.ANIMATION_SLOW_MILLIS
 import com.google.common.util.concurrent.ListenableFuture
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
@@ -61,13 +60,19 @@ class Camera : Fragment() {
                 .build()
             imageCapture.takePicture(outputFileOptions, Executors.newSingleThreadExecutor(), object: ImageCapture.OnImageSavedCallback{
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    var a =5
-                    a+=6
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                        // Display flash animation to indicate that photo was captured
+                        binding.root.postDelayed({
+                            binding.root.foreground = ColorDrawable(Color.WHITE)
+                            binding.root.postDelayed(
+                                { binding.root.foreground = null }, ANIMATION_FAST_MILLIS)
+                        }, ANIMATION_SLOW_MILLIS)
+                    }
                 }
 
                 override fun onError(exception: ImageCaptureException) {
-                    var a =5
-                    a+=6
+
                 }
 
             })
