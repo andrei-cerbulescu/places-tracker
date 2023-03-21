@@ -18,6 +18,23 @@
         android:id="@+id/camera"
         android:name="com.andrei.cerbulescu.placestracker.fragments.Camera"
         android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" />
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_camera_to_previewImage"
+            app:destination="@id/previewImage"
+            app:launchSingleTop="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewImage"
+        android:name="com.andrei.cerbulescu.placestracker.PreviewImage"
+        android:label="fragment_preview_image"
+        tools:layout="@layout/fragment_preview_image" >
+        <action
+            android:id="@+id/action_previewImage_to_home2"
+            app:destination="@id/home" />
+        <argument
+            android:name="location"
+            app:argType="android.location.Location" />
+    </fragment>
 
 </navigation>

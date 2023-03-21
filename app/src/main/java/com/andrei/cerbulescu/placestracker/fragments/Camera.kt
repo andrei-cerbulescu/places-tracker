@@ -1,8 +1,11 @@
 package com.andrei.cerbulescu.placestracker.fragments
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -18,6 +21,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.andrei.cerbulescu.placestracker.databinding.FragmentCameraBinding
 import com.andrei.cerbulescu.placestracker.utils.ANIMATION_FAST_MILLIS
 import com.andrei.cerbulescu.placestracker.utils.ANIMATION_SLOW_MILLIS
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.common.util.concurrent.ListenableFuture
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,6 +33,7 @@ class Camera : Fragment() {
     private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
     private lateinit var previewView : PreviewView
     private lateinit var imageCapture : ImageCapture
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +43,8 @@ class Camera : Fragment() {
         var view = binding.root
         previewView = binding.previewView
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider = cameraProviderFuture.get()
             bindPreview(cameraProvider)
@@ -58,16 +66,20 @@ class Camera : Fragment() {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     contentValues)
                 .build()
+
             imageCapture.takePicture(outputFileOptions, Executors.newSingleThreadExecutor(), object: ImageCapture.OnImageSavedCallback{
+                @SuppressLint("MissingPermission")
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                        // Display flash animation to indicate that photo was captured
                         binding.root.postDelayed({
                             binding.root.foreground = ColorDrawable(Color.WHITE)
                             binding.root.postDelayed(
                                 { binding.root.foreground = null }, ANIMATION_FAST_MILLIS)
                         }, ANIMATION_SLOW_MILLIS)
+
+                        fusedLocationClient.lastLocation.addOnSuccessListener {
+                            
+                        }
                     }
                 }
 
