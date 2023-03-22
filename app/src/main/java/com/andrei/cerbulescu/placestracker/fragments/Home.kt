@@ -1,34 +1,29 @@
 package com.andrei.cerbulescu.placestracker.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Context.LOCATION_SERVICE
-import android.location.Location
-import android.location.LocationManager
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.andrei.cerbulescu.placestracker.R
-import com.andrei.cerbulescu.placestracker.data.Place
-import com.andrei.cerbulescu.placestracker.data.PlaceDao
 import com.andrei.cerbulescu.placestracker.data.PlaceViewModel
 import com.andrei.cerbulescu.placestracker.databinding.FragmentHomeBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
-class Home : Fragment(), OnMapReadyCallback {
+class Home : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var mPlaceViewModel: PlaceViewModel
 
@@ -55,15 +50,6 @@ class Home : Fragment(), OnMapReadyCallback {
         binding.mapView.onResume()
         binding.mapView.getMapAsync(this)
 
-        mPlaceViewModel.readAllData.observe(viewLifecycleOwner, Observer{
-            for(place in it){
-                googleMap.addMarker(MarkerOptions().position(LatLng(place.latitude.toDouble(),
-                    place.longitude.toDouble()
-                )))
-            }
-            }
-        )
-
         return view
     }
 
@@ -71,6 +57,19 @@ class Home : Fragment(), OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap) {
         p0.let { map ->
             googleMap = map
+            googleMap.setOnMarkerClickListener(this)
+
+            mPlaceViewModel.readAllData.observe(viewLifecycleOwner, Observer{
+                googleMap.clear()
+                for(place in it){
+                    googleMap.addMarker(MarkerOptions().position(LatLng(
+                        place.latitude,
+                        place.longitude
+                    )))
+                }
+            }
+            )
+
             locationManager.lastLocation.addOnCompleteListener{
                 var lat: Double = 0.0
                 var long: Double = 0.0
@@ -90,5 +89,16 @@ class Home : Fragment(), OnMapReadyCallback {
         super.onDestroyView()
 
         googleMap.clear()
+    }
+
+    override fun onMarkerClick(p0: Marker): Boolean {
+        mPlaceViewModel
+            .findFirstByDistance(p0.position.latitude, p0.position.longitude)
+            .observe(viewLifecycleOwner, Observer{
+                val navigateAction = HomeDirections.actionHomeToPreviewLocation(it)
+                findNavController().navigate(navigateAction)
+        })
+
+        return true
     }
 }

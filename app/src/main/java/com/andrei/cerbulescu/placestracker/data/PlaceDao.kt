@@ -1,19 +1,22 @@
 package com.andrei.cerbulescu.placestracker.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface PlaceDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addPlace(place: Place)
 
+    @Delete
+    fun deletePlace(place: Place)
+
     @Query("SELECT * FROM place_table ORDER BY id Asc")
     fun readAllData(): LiveData<List<Place>>
 
-    @Query("SELECT * FROM place_table ORDER BY ABS(latitude - :latitude) + ABS(longitude - :longitude) ASC")
-    fun findByDistance(latitude:Double,longitude:Double): LiveData<List<Place>>
+    @Query("SELECT * FROM place_table ORDER BY ABS(latitude - :latitude) + ABS(longitude - :longitude) ASC LIMIT 1")
+    fun findFirstByDistance(latitude:Double,longitude:Double): LiveData<Place>
+
+    @Query("SELECT * FROM place_table WHERE id = :id LIMIT 1")
+    fun findById(id: Int): LiveData<Place>
 }

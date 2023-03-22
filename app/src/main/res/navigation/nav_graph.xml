@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_home_to_camera"
             app:destination="@id/camera" />
+        <action
+            android:id="@+id/action_home_to_previewLocation"
+            app:destination="@id/previewLocation" />
     </fragment>
     <fragment
         android:id="@+id/camera"
@@ -38,6 +41,15 @@
         <argument
             android:name="imageUri"
             app:argType="android.net.Uri" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewLocation"
+        android:name="com.andrei.cerbulescu.placestracker.fragments.PreviewLocation"
+        android:label="fragment_preview_location"
+        tools:layout="@layout/fragment_preview_location" >
+        <argument
+            android:name="place"
+            app:argType="com.andrei.cerbulescu.placestracker.data.Place" />
     </fragment>
 
 </navigation>

@@ -9,7 +9,15 @@ class PlaceRepository(private val placeDao: PlaceDao) {
         placeDao.addPlace(place)
     }
 
-    fun findByDistance(latitude: Double, longitude: Double): LiveData<List<Place>> {
-        return placeDao.findByDistance(latitude,longitude)
+    fun findFirstByDistance(latitude: Double, longitude: Double): LiveData<Place> {
+        return placeDao.findFirstByDistance(latitude,longitude)
+    }
+
+    fun findById(id: Int): LiveData<Place>{
+        return placeDao.findById(id)
+    }
+
+    suspend fun deletePlace(place: Place){
+        placeDao.deletePlace(place)
     }
 }

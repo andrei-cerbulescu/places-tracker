@@ -1,6 +1,7 @@
 package com.andrei.cerbulescu.placestracker.fragments
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.nio.file.Files
 
 
 class PreviewImage : Fragment(), OnMapReadyCallback {
@@ -65,6 +68,12 @@ class PreviewImage : Fragment(), OnMapReadyCallback {
        }
 
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        requireContext().contentResolver.delete(args.imageUri, null, null)
     }
 
     override fun onMapReady(p0: GoogleMap) {

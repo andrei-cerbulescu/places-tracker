@@ -22,4 +22,18 @@ class PlaceViewModel(application: Application): AndroidViewModel(application) {
             repository.addPlace(place)
         }
     }
+
+    fun findFirstByDistance(lat: Double, long: Double): LiveData<Place>{
+        return repository.findFirstByDistance(lat, long)
+    }
+
+    fun findFirstById(id: Int): LiveData<Place>{
+        return repository.findById(id)
+    }
+
+    fun deletePlace(place: Place){
+        viewModelScope.launch(Dispatchers.IO){
+            repository.deletePlace(place)
+        }
+    }
 }
