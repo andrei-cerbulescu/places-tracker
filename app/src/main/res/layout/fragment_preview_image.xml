@@ -14,10 +14,17 @@
         android:contentDescription="@string/image_preview"
         tools:src="@tools:sample/backgrounds/scenic" />
 
-<com.google.android.gms.maps.MapView
+    <com.google.android.gms.maps.MapView
     android:id="@+id/map_view"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="SAVE" />
 
 </LinearLayout>

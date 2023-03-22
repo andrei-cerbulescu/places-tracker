@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".fragments.Camera">
 
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
     <Button
         android:id="@+id/camera_button"
         android:layout_width="130dp"
@@ -13,10 +19,4 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:layout_alignParentBottom="true"/>
-
-    <TextView
-        android:id="@+id/counterText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0" />
 </RelativeLayout>

@@ -11,7 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.andrei.cerbulescu.placestracker.R
 import com.andrei.cerbulescu.placestracker.data.AppDatabase
 import com.andrei.cerbulescu.placestracker.data.Place
 import com.andrei.cerbulescu.placestracker.data.PlaceViewModel
@@ -55,9 +57,13 @@ class PreviewImage : Fragment(), OnMapReadyCallback {
 
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
-        val place = Place(0, args.location.latitude.toLong(), args.location.longitude.toLong(), stream.toByteArray())
-        // AppDatabase.getDatabase(requireContext()).placeDao()
-        mPlaceViewModel.addPlace(place)
+
+       binding.saveButton.setOnClickListener {
+           val place = Place(0, args.location.latitude, args.location.longitude, stream.toByteArray())
+           mPlaceViewModel.addPlace(place)
+           findNavController().navigate(R.id.home)
+       }
+
         return view
     }
 
@@ -65,10 +71,9 @@ class PreviewImage : Fragment(), OnMapReadyCallback {
         p0?.let {
             googleMap = it
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(args.location.latitude, args.location.longitude),
-                1F
+                15F
             ))
             googleMap.addMarker(MarkerOptions().position(LatLng(args.location.latitude, args.location.longitude)))
-            //googleMap.moveCamera
         }
     }
 

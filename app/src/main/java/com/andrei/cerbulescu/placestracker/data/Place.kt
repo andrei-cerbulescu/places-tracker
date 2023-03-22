@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Place (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val latitude: Long,
-    val longitude: Long,
+    val latitude: Double,
+    val longitude: Double,
     val image: ByteArray
     )
