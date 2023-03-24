@@ -64,6 +64,7 @@ class PreviewImage : Fragment(), OnMapReadyCallback {
        binding.saveButton.setOnClickListener {
            val place = Place(0, args.location.latitude, args.location.longitude, stream.toByteArray())
            mPlaceViewModel.addPlace(place)
+           findNavController().popBackStack(R.id.home, false, false)
            findNavController().navigate(R.id.home)
        }
 

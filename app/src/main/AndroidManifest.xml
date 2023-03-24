@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlacesTracker"
         tools:targetApi="31">
+        <activity
+            android:name=".BottomNavigator"
+            android:exported="false"
+            android:label="@string/title_activity_bottom_navigator" />
+
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/provider_paths" />
@@ -31,7 +37,6 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".MainActivity"
@@ -52,7 +57,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
 
 </manifest>

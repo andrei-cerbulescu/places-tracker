@@ -1,27 +1,47 @@
 package com.andrei.cerbulescu.placestracker
 
+import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkBuilder
+import androidx.navigation.NavGraph
+import androidx.navigation.Navigator
+import androidx.navigation.fragment.NavHostFragment
+import com.andrei.cerbulescu.placestracker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
         supportActionBar?.hide();
         setContentView(R.layout.activity_main)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             get_permissions()
         }
+        setContentView(view)
     }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun get_permissions(){
         var toBeRequested = arrayOf(
             android.Manifest.permission.CAMERA,
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.POST_NOTIFICATIONS
         )
         var needsConfirmation = mutableListOf<String>()
 
@@ -50,4 +70,35 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val channel = NotificationChannel(
+                "places-tracker-notification",
+                "PlacesTracker Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val pendingIntent = NavDeepLinkBuilder(this)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.camera)
+            .createPendingIntent()
+
+        val notification = NotificationCompat.Builder(this, "places-tracker-notification")
+            .setContentText("Heey")
+            .setContentTitle("Why don't you make a memory?")
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+        notificationManager.notify(1, notification)
+    }
+
 }

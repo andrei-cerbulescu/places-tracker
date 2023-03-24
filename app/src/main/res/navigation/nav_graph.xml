@@ -21,11 +21,15 @@
         android:id="@+id/camera"
         android:name="com.andrei.cerbulescu.placestracker.fragments.Camera"
         android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" >
+        tools:layout="@layout/fragment_camera">
         <action
             android:id="@+id/action_camera_to_previewImage"
             app:destination="@id/previewImage"
             app:launchSingleTop="false" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:action="ACTION_VIEW"
+            app:uri="https://places-tracker.com/camera" />
     </fragment>
     <fragment
         android:id="@+id/previewImage"
