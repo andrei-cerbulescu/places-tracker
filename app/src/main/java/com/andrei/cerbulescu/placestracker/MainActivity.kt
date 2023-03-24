@@ -1,36 +1,60 @@
 package com.andrei.cerbulescu.placestracker
 
-import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.navigation.NavController
-import androidx.navigation.NavDeepLinkBuilder
-import androidx.navigation.NavGraph
-import androidx.navigation.Navigator
+import androidx.navigation.*
 import androidx.navigation.fragment.NavHostFragment
 import com.andrei.cerbulescu.placestracker.databinding.ActivityMainBinding
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navigator: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
+        navigator = binding.navHostFragment.getFragment<NavHostFragment>().navController
         supportActionBar?.hide();
         setContentView(R.layout.activity_main)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             get_permissions()
         }
+
+        binding.CameraButton.setOnClickListener{
+            navigator.navigate(R.id.action_home_to_camera)
+        }
+
+        navigator.addOnDestinationChangedListener{ navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+            var buttons = mutableListOf(binding.CameraButton, binding.HomeButton, binding.SearchButton)
+            for(button in buttons){
+                button.setBackgroundColor(Color.DKGRAY)
+            }
+
+            if(navDestination.id == R.id.home) {
+                binding.HomeButton.setBackgroundColor(Color.LTGRAY)
+            }
+
+            if(navDestination.id == R.id.camera){
+                binding.CameraButton.setBackgroundColor(Color.LTGRAY)
+            }
+
+//            if(navDestination.id == R.id.SearchButton){
+//                binding.CameraButton.setBackgroundColor(Color.LTGRAY)
+//            }
+
+        }
+
         setContentView(view)
     }
 

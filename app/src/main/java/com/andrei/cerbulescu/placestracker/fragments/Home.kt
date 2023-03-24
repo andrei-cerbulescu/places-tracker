@@ -40,10 +40,6 @@ class Home : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
 
         mPlaceViewModel = ViewModelProvider(this)[PlaceViewModel::class.java]
 
-        binding.cameraButton.setOnClickListener{
-            findNavController().navigate(R.id.action_home_to_camera)
-        }
-
         locationManager = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         binding.mapView.onCreate(savedInstanceState)
