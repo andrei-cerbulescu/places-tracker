@@ -92,9 +92,9 @@ class MainActivity : AppCompatActivity() {
             .createPendingIntent()
 
         val notification = NotificationCompat.Builder(this, "places-tracker-notification")
-            .setContentText("Heey")
-            .setContentTitle("Why don't you make a memory?")
-            .setSmallIcon(R.drawable.notification_icon)
+            .setContentText("Why don't you make a memory?")
+            .setContentTitle("Heey")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()

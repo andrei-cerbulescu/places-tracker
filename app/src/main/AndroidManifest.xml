@@ -16,10 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlacesTracker"
         tools:targetApi="31">
-        <activity
-            android:name=".BottomNavigator"
-            android:exported="false"
-            android:label="@string/title_activity_bottom_navigator" />
 
         <meta-data
             android:name="com.google.android.actions"
