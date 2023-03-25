@@ -13,6 +13,10 @@ class PlaceRepository(private val placeDao: PlaceDao) {
         return placeDao.findFirstByDistance(latitude,longitude)
     }
 
+    fun findByDistance(latitude:Double,longitude:Double, distance:Double): LiveData<List<Place>>{
+        return placeDao.findByDistance(latitude, longitude, distance)
+    }
+
     fun findById(id: Int): LiveData<Place>{
         return placeDao.findById(id)
     }

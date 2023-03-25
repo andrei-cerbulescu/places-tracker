@@ -31,6 +31,10 @@ class PlaceViewModel(application: Application): AndroidViewModel(application) {
         return repository.findById(id)
     }
 
+    fun findByDistance(latitude:Double,longitude:Double, distance:Double): LiveData<List<Place>>{
+        return repository.findByDistance(latitude, longitude, distance)
+    }
+
     fun deletePlace(place: Place){
         viewModelScope.launch(Dispatchers.IO){
             repository.deletePlace(place)

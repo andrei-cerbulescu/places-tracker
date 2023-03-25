@@ -6,7 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.andrei.cerbulescu.placestracker.R
+import com.andrei.cerbulescu.placestracker.data.PlaceViewModel
 import com.andrei.cerbulescu.placestracker.databinding.FragmentSearchBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -17,7 +21,9 @@ import com.google.android.gms.maps.model.LatLng
 
 class Search : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentSearchBinding
+
     private lateinit var googleMap: GoogleMap
+    private lateinit var mPlaceViewModel: PlaceViewModel
 
     private lateinit var locationManager: FusedLocationProviderClient
 
@@ -27,6 +33,7 @@ class Search : Fragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentSearchBinding.inflate(layoutInflater)
 
+        mPlaceViewModel = ViewModelProvider(this)[PlaceViewModel::class.java]
         locationManager = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         binding.mapView.onCreate(savedInstanceState)
@@ -53,6 +60,13 @@ class Search : Fragment(), OnMapReadyCallback {
                     LatLng(lat, long),
                 15F
             ))
+        }
+
+        googleMap.setOnMapClickListener{
+            mPlaceViewModel.findByDistance(it.latitude, it.longitude, 0.01)
+                .observe(viewLifecycleOwner, Observer{ places ->
+                    places
+            })
         }
     }
 }
