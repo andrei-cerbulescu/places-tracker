@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.navigation.*
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.andrei.cerbulescu.placestracker.databinding.ActivityMainBinding
 import com.google.android.material.button.MaterialButton
 
@@ -31,9 +32,19 @@ class MainActivity : AppCompatActivity() {
             get_permissions()
         }
 
-        binding.CameraButton.setOnClickListener{
-            navigator.navigate(R.id.action_home_to_camera)
+        binding.HomeButton.setOnClickListener{
+            navigator.popBackStack(R.id.home, true, false)
+            navigator.navigate(R.id.home)
         }
+
+        binding.CameraButton.setOnClickListener{
+            navigator.navigate(R.id.camera)
+        }
+
+        binding.SearchButton.setOnClickListener{
+            navigator.navigate(R.id.search)
+        }
+
 
         navigator.addOnDestinationChangedListener{ navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
             var buttons = mutableListOf(binding.CameraButton, binding.HomeButton, binding.SearchButton)
@@ -49,9 +60,9 @@ class MainActivity : AppCompatActivity() {
                 binding.CameraButton.setBackgroundColor(Color.LTGRAY)
             }
 
-//            if(navDestination.id == R.id.SearchButton){
-//                binding.CameraButton.setBackgroundColor(Color.LTGRAY)
-//            }
+            if(navDestination.id == R.id.search){
+                binding.SearchButton.setBackgroundColor(Color.LTGRAY)
+            }
 
         }
 

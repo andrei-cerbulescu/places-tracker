@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_home_to_previewLocation"
             app:destination="@id/previewLocation" />
+        <action
+            android:id="@+id/action_home_to_search"
+            app:destination="@id/search" />
     </fragment>
     <fragment
         android:id="@+id/camera"
@@ -55,5 +58,10 @@
             android:name="place"
             app:argType="com.andrei.cerbulescu.placestracker.data.Place" />
     </fragment>
+    <fragment
+        android:id="@+id/search"
+        android:name="com.andrei.cerbulescu.placestracker.fragments.Search"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 
 </navigation>
