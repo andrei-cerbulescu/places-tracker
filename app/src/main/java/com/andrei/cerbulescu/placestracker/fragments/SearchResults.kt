@@ -17,15 +17,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andrei.cerbulescu.placestracker.R
+import com.andrei.cerbulescu.placestracker.adapters.PlaceRecyclerAdapter
 import com.andrei.cerbulescu.placestracker.data.Place
 import com.andrei.cerbulescu.placestracker.databinding.FragmentSearchResultsBinding
+import kotlin.random.Random
 
 class SearchResults : Fragment() {
     val args: SearchResultsArgs by navArgs()
     private lateinit var binding: FragmentSearchResultsBinding
     private lateinit var places: Array<Place>
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,21 +37,14 @@ class SearchResults : Fragment() {
     ): View? {
         binding = FragmentSearchResultsBinding.inflate(layoutInflater)
 
+        recyclerView = binding.recyclerView
+        recyclerView.hasFixedSize()
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
         places = args.places
 
+        recyclerView.adapter = PlaceRecyclerAdapter(places)
+
         return binding.root
-    }
-
-    @Composable
-    fun ListItem(place: Place){
-        var image = BitmapFactory.decodeByteArray(place.image, 0, place.image.size).asImageBitmap()
-        Image(bitmap = image, contentDescription = "test")
-    }
-
-    @Composable
-    fun RecyclerView(places: List<Place>){
-        LazyColumn(content = Modifier.padding(vertical = 4.dp)){
-
-        }
     }
 }
