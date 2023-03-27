@@ -65,7 +65,8 @@ class Search : Fragment(), OnMapReadyCallback {
         googleMap.setOnMapClickListener{
             mPlaceViewModel.findByDistance(it.latitude, it.longitude, 0.01)
                 .observe(viewLifecycleOwner, Observer{ places ->
-                    places
+                    val navigateAction = SearchDirections.actionSearchToSearchResults(places.toTypedArray())
+                    findNavController().navigate(navigateAction)
             })
         }
     }

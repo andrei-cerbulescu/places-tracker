@@ -62,6 +62,19 @@
         android:id="@+id/search"
         android:name="com.andrei.cerbulescu.placestracker.fragments.Search"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_to_searchResults"
+            app:destination="@id/searchResults" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchResults"
+        android:name="com.andrei.cerbulescu.placestracker.fragments.SearchResults"
+        android:label="fragment_search_results"
+        tools:layout="@layout/fragment_search_results" >
+        <argument
+            android:name="places"
+            app:argType="com.andrei.cerbulescu.placestracker.data.Place[]" />
+    </fragment>
 
 </navigation>
