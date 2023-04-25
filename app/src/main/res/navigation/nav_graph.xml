@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_home_to_search"
             app:destination="@id/search" />
+        <action
+            android:id="@+id/action_home_to_pendingPermissions"
+            app:destination="@id/pendingPermissions" />
     </fragment>
     <fragment
         android:id="@+id/camera"
@@ -75,6 +78,15 @@
         <argument
             android:name="places"
             app:argType="com.andrei.cerbulescu.placestracker.data.Place[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/pendingPermissions"
+        android:name="com.andrei.cerbulescu.placestracker.fragments.PendingPermissions"
+        android:label="fragment_pending_permissions"
+        tools:layout="@layout/fragment_pending_permissions" >
+        <action
+            android:id="@+id/action_pendingPermissions_to_home"
+            app:destination="@id/home" />
     </fragment>
 
 </navigation>

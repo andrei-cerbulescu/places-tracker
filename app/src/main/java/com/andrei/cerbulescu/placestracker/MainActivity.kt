@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity() {
         navigator = binding.navHostFragment.getFragment<NavHostFragment>().navController
         supportActionBar?.hide();
         setContentView(R.layout.activity_main)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            get_permissions()
-        }
 
         binding.HomeButton.setOnClickListener{
             navigator.popBackStack(R.id.home, true, false)

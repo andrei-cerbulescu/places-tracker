@@ -1,12 +1,17 @@
 package com.andrei.cerbulescu.placestracker.fragments
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.content.PermissionChecker
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -36,6 +41,9 @@ class Home : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(layoutInflater)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            get_permissions()
+        }
         val view = binding.root
 
         mPlaceViewModel = ViewModelProvider(this)[PlaceViewModel::class.java]
@@ -51,6 +59,9 @@ class Home : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(p0: GoogleMap) {
+        if (view == null) {
+            return
+        }
         p0.let { map ->
             googleMap = map
             googleMap.setOnMarkerClickListener(this)
@@ -83,8 +94,9 @@ class Home : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        googleMap.clear()
+        if (::googleMap.isInitialized){
+            googleMap.clear()
+        }
     }
 
     override fun onMarkerClick(p0: Marker): Boolean {
@@ -96,5 +108,21 @@ class Home : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         })
 
         return true
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun get_permissions(){
+        var toBeRequested = arrayOf(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.POST_NOTIFICATIONS
+        )
+        for(e in toBeRequested){
+            if(checkSelfPermission(requireContext(), e) != PermissionChecker.PERMISSION_GRANTED){
+                findNavController().popBackStack(R.id.pendingPermissions, false, false)
+                findNavController().navigate(R.id.pendingPermissions)
+            }
+        }
     }
 }
